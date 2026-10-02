@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BestBuy Finder — Find the product that fits you best</title>
+<meta name="description" content="Answer a few questions and get products ranked by how well they match your needs.">
+<style>
+:root{--bg:#F8FAFC;--pri:#0F172A;--sec:#475569;--acc:#2563EB;--acch:#1D4ED8;--ok:#10B981;--star:#F59E0B;--red:#EF4444;--card:#fff;--bd:#E2E8F0;--r1:8px;--r2:12px;--r3:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--pri)}
+body.hastray{padding-bottom:76px}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin:.4em 0}h2{font-size:1.5rem;margin:1.6em 0 .5em}h3{margin:.2em 0;font-size:1.1rem}h4{margin:.8em 0 .2em}
+a{color:var(--acc)}.wrap{max-width:1120px;margin:0 auto;padding:0 20px}.narrow{max-width:680px}.muted{color:var(--sec)}.lead{color:var(--sec);font-size:1.15rem;max-width:640px}
+.sr,.skip:not(:focus){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.skip:focus{position:fixed;top:8px;left:8px;background:#fff;padding:8px;z-index:99}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#hdr{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid transparent}#hdr.sc{border-color:var(--bd);box-shadow:0 2px 8px rgba(15,23,42,.06)}
+.bar{display:flex;align-items:center;justify-content:space-between;min-height:64px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.1rem;color:var(--pri);text-decoration:none}
+nav{display:flex;align-items:center;gap:20px}nav a:not(.btn){color:var(--sec);text-decoration:none;font-weight:500}nav a:not(.btn):hover{color:var(--pri)}
+#cc{background:var(--acc);color:#fff;border-radius:99px;padding:0 7px;font-size:.75rem}#cc:empty{display:none}
+.menu{display:none;background:none;border:1px solid var(--bd);border-radius:var(--r1);font-size:1.4rem;padding:4px 12px;cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border:1px solid var(--acc);border-radius:var(--r1);background:var(--acc);color:#fff;font:600 1rem system-ui,sans-serif;text-decoration:none;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--acch)}.btn.ghost{background:#fff;color:var(--acc)}.btn.ghost:hover{background:#EFF6FF}.btn.sm{min-height:36px;padding:0 14px;font-size:.9rem}
+.link{background:none;border:0;color:var(--acc);cursor:pointer;text-decoration:underline;padding:0;font:inherit;font-size:.85rem}
+.hero{padding:56px 20px 24px}.search{margin-top:28px;max-width:760px}.search label{display:block;font-weight:600;margin-bottom:8px}
+.srow{display:flex;gap:10px}.inp{position:relative;flex:1}
+input#q{width:100%;min-height:52px;padding:0 44px 0 16px;border:1px solid var(--bd);border-radius:var(--r2);font:inherit;background:#fff}
+.x{position:absolute;right:8px;top:12px;border:0;background:none;cursor:pointer;font-size:1rem;color:var(--sec)}.search .btn{min-height:52px;border-radius:var(--r2)}
+.err{color:var(--red);min-height:1.4em;margin:.4em 0;font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--sec)}.chip{border:1px solid var(--bd);background:#fff;border-radius:99px;padding:6px 14px;cursor:pointer;font:inherit}.chip:hover{border-color:var(--acc);color:var(--acc)}
+.sec{padding-bottom:12px}.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
+.steps li{background:var(--card);border:1px solid var(--bd);border-radius:var(--r3);padding:20px;counter-increment:s}.steps li:before{content:"0" counter(s);color:var(--acc);font-weight:700;font-size:1.4rem}.steps p{color:var(--sec);margin:.3em 0 0}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.cat{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 10px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r3);font:600 1rem system-ui,sans-serif;cursor:pointer;transition:transform .15s,border-color .15s}.cat span{font-size:2rem}.cat:hover{border-color:var(--acc);transform:translateY(-2px)}
+.prog{height:8px;background:var(--bd);border-radius:99px;overflow:hidden;margin:8px 0 20px}.prog i{display:block;height:100%;background:var(--acc);transition:width .35s}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--r3);padding:28px}.panel h2{margin-top:0}
+.fade{animation:fade .3s ease}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pills{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}fieldset{border:0;padding:0;margin:18px 0 0}legend{font-weight:600}
+.pill{position:relative}.pill input{position:absolute;opacity:0}.pill span{display:inline-block;padding:10px 16px;border:1px solid var(--bd);border-radius:99px;background:#fff;cursor:pointer;user-select:none}
+.pill input:checked+span{background:var(--acc);border-color:var(--acc);color:#fff}.pill input:checked+span:before{content:"\2713\00a0"}.pill input:focus-visible+span{outline:3px solid var(--acc);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--acc);margin:12px 0 4px}.big{font-size:1.5rem;color:var(--acc)}.rng{display:flex;justify-content:space-between;color:var(--sec);font-size:.85rem}
+.nav2{display:flex;justify-content:space-between;margin-top:20px}
+.load{text-align:center;padding:90px 20px}.spin{width:48px;height:48px;border:5px solid var(--bd);border-top-color:var(--acc);border-radius:50%;margin:0 auto 20px;animation:sp .9s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r2);padding:16px;margin:20px 0}.sum dt{font-size:.8rem;color:var(--sec);text-transform:uppercase;letter-spacing:.04em}.sum dd{margin:2px 0 0;font-weight:600}
+.note{background:#FEF3C7;border:1px solid var(--star);border-radius:var(--r2);padding:14px 16px;margin:12px 0}
+.how,.filters{background:var(--card);border:1px solid var(--bd);border-radius:var(--r2);padding:12px 16px;margin:14px 0}summary{cursor:pointer;font-weight:600}.fgrid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:12px}.fgrid2 label{display:flex;flex-direction:column;gap:4px;font-size:.9rem;color:var(--sec)}
+select{min-height:40px;border:1px solid var(--bd);border-radius:var(--r1);padding:0 8px;font:inherit;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--bd);border-radius:var(--r3);overflow:hidden;transition:box-shadow .2s,transform .2s}.card:hover{box-shadow:0 8px 24px rgba(15,23,42,.08);transform:translateY(-2px)}
+.card.best{flex-direction:row;border:2px solid var(--ok);margin:12px 0}.card.best .ph{width:240px;height:auto;flex-shrink:0}
+.badge{position:absolute;top:12px;left:12px;background:var(--ok);color:#fff;font-weight:700;font-size:.75rem;padding:4px 10px;border-radius:99px;letter-spacing:.04em;z-index:1}
+.ph{display:flex;align-items:center;justify-content:center;height:130px;background:#F1F5F9;font-size:3.5rem}.card .body{padding:18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.brand{margin:0;color:var(--sec);font-size:.85rem}.rate,.price{margin:0}.star{color:var(--star)}.price s{color:var(--sec);margin:0 4px}.disc{color:var(--red);font-weight:600;font-size:.9rem}
+.scores{display:flex;gap:8px;margin:6px 0}.scores .sc{flex:1;text-align:center;background:#F1F5F9;border-radius:var(--r1);padding:6px;font-size:.75rem;color:var(--sec)}.scores .sc b{display:block;font-size:1.2rem;color:var(--pri)}.scores .sc.m{background:#ECFDF5}.scores .sc.m b{color:#047857}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}.tag{font-size:.78rem;padding:3px 8px;border-radius:99px;border:1px solid}.tag.ok{background:#ECFDF5;color:#047857;border-color:#A7F3D0}.tag.no{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.why{margin:.3em 0;padding-left:18px;color:var(--sec);font-size:.92rem}.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:10px}.acts .btn{flex:1;min-width:140px}
+.empty{text-align:center;background:var(--card);border:1px dashed var(--bd);border-radius:var(--r3);padding:48px 20px;margin:24px 0}
+.scroll{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:var(--r2);margin:20px 0}table.cmp{border-collapse:collapse;width:100%;min-width:560px}.cmp th,.cmp td{padding:12px 14px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}.cmp tbody th{color:var(--sec);font-weight:600;white-space:nowrap;background:#F8FAFC}
+.tray{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bd);box-shadow:0 -4px 16px rgba(15,23,42,.08);padding:12px 0;z-index:30}.trow{display:flex;justify-content:space-between;align-items:center;gap:12px}.tchips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.tchip{background:#EFF6FF;border-radius:99px;padding:4px 10px;font-size:.85rem}
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--pri);color:#fff;padding:10px 18px;border-radius:var(--r2);opacity:0;pointer-events:none;transition:.25s;z-index:40;max-width:90%}#toast.on{opacity:1;transform:translate(-50%,0)}
+footer{margin-top:60px;background:#fff;border-top:1px solid var(--bd);padding:32px 0}.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.fgrid p{color:var(--sec);margin:.3em 0}.disc-note{grid-column:1/-1;font-size:.85rem}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:repeat(2,1fr)}.card.best{flex-direction:column}.card.best .ph{width:auto;height:130px}}
+@media(max-width:640px){.menu{display:block}nav{display:none;width:100%;flex-direction:column;align-items:flex-start;padding:8px 0 16px}nav.open{display:flex}.srow{flex-direction:column}.grid,.steps,.fgrid{grid-template-columns:1fr}.hero{padding-top:32px}.tchips strong{display:none}.acts .btn{min-height:48px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+<header id="hdr"><div class="wrap bar">
+  <a class="logo" href="#/" aria-label="BestBuy Finder home"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="#2563EB" stroke-width="3"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 18l7 7" stroke="#0F172A" stroke-width="3" stroke-linecap="round"/></svg>BestBuy Finder</a>
+  <button id="menuBtn" class="menu" data-act="menu" aria-expanded="false" aria-controls="nav" aria-label="Toggle navigation menu">&#9776;</button>
+  <nav id="nav" aria-label="Main">
+    <a href="#/">Home</a><a href="#/how">How It Works</a><a href="#/compare">Compare <span id="cc"></span></a>
+    <a class="btn sm" href="#/search">Search</a>
+  </nav>
+</div></header>
+<main id="app" tabindex="-1"></main>
+<div id="tray"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<footer><div class="wrap fgrid">
+  <div><strong>BestBuy Finder</strong><p>Products ranked by how well they match what you need.</p></div>
+  <div><strong>Categories</strong><p>Mobiles, Laptops, Headphones, Smartwatches, Shoes</p></div>
+  <div><strong>Explore</strong><p><a href="#/how">How It Works</a><br><a href="#/compare">Compare Products</a></p></div>
+  <p class="disc-note">Product information, prices, availability and ratings may change. Always verify details on the retailer's website before purchasing. Demo data is fictional; "View" links open a store search page, not a verified product page. The quality score is an internal estimate, separate from user ratings.</p>
+</div></footer>
+<script>
+'use strict';
+
+/* Product data + service layer. Replace ProductService.getProducts with real API adapters later (see README). */
+const LABELS = {Mobile:['RAM','Storage','Battery'],Laptop:['RAM','Storage','Weight'],Headphones:['Battery','Driver','Connectivity'],Smartwatch:['Battery','Display','Water rating'],Shoes:['Upper','Sole','Weight']};
+const ICONS = {Mobile:'📱',Laptop:'💻',Headphones:'🎧',Smartwatch:'⌚',Shoes:'👟'};
+// name|brand|subcategory|price|originalPrice|rating|reviews|quality|popularity|features|purposes|platform|specs
+const RAW = {
+Mobile:`Nova X1|Nova|Budget Phone|13999|15999|4.2|18400|74|85|5G,Long Battery,Fast Charging|Social Media,Normal Daily Use,Study|Amazon|6GB/128GB/5000mAh
+Pixelis C3|Pixelis|Camera Phone|24999|29999|4.5|12500|88|80|5G,Good Camera,AMOLED Display,Fast Charging,Long Battery|Photography,Video,Social Media|Flipkart|8GB/128GB/5000mAh
+Vortex G5|Vortex|Gaming Phone|23999|27999|4.4|9800|86|78|5G,High Performance,120Hz Display,Gaming Performance,AMOLED Display,Fast Charging|Gaming,Video|Amazon|8GB/256GB/5500mAh
+Orbit Pro 12|Orbit|Flagship|64999|74999|4.6|7200|95|90|5G,Good Camera,High Performance,AMOLED Display,120Hz Display,Large Storage,Good Speakers,Fast Charging|Photography,Video,Gaming,Work|Amazon|12GB/256GB/4800mAh
+Lumen A7|Lumen|All-rounder|19999|22999|4.3|21000|82|88|5G,AMOLED Display,Long Battery,Good Camera,Fast Charging|Gaming,Photography,Study,Normal Daily Use|Flipkart|8GB/128GB/5000mAh
+Spark Lite|Spark|Budget Phone|8999|10499|4.0|32000|66|82|Long Battery,Large Storage|Study,Normal Daily Use,Social Media|Flipkart|4GB/64GB/5000mAh
+Zenith Z9|Zenith|Gaming Phone|34999|39999|4.5|5600|90|70|5G,High Performance,120Hz Display,Gaming Performance,AMOLED Display,Long Battery,Fast Charging,Good Speakers|Gaming,Video|Amazon|12GB/256GB/6000mAh
+Aura S2|Aura|All-rounder|27999|31999|4.4|8400|87|75|5G,AMOLED Display,120Hz Display,Good Camera,Long Battery,Good Speakers|Photography,Work,Social Media,Study|Flipkart|8GB/256GB/5000mAh`,
+Laptop:`BookEdge S|Edge|Student Laptop|38999|44999|4.1|11000|76|80|Lightweight,Long Battery,Good Display|College,Office Work,General Use|Amazon|8GB/512GB/1.4kg
+Titan G15|Titan|Gaming Laptop|79999|92999|4.4|6200|88|76|High Performance,Dedicated GPU,High Refresh Rate,High RAM,Good Display|Gaming,Video Editing|Amazon|16GB/512GB/2.3kg
+CodeAir 14|CodeAir|Programming Laptop|64999|72999|4.5|4800|90|72|High Performance,Long Battery,Lightweight,High RAM,Large Storage,Good Display|Programming,Office Work,College|Flipkart|16GB/1TB/1.3kg
+Studio Q|Studio|Creator Laptop|109999|124999|4.6|2900|94|65|High Performance,Dedicated GPU,Good Display,High RAM,Large Storage|Video Editing,Graphic Design,Programming|Amazon|32GB/1TB/1.8kg
+Biz Slim|Biz|Business Laptop|54999|61999|4.3|7500|85|74|Lightweight,Long Battery,Good Display,Large Storage|Office Work,General Use,Programming|Flipkart|16GB/512GB/1.2kg
+Scholar Go|Scholar|Student Laptop|29999|34999|4.0|15200|70|86|Lightweight,Long Battery|College,General Use|Flipkart|8GB/256GB/1.5kg`,
+Headphones:`Beat Buds|Beat|TWS|2499|3999|4.1|40500|72|90|Good Bass,Long Battery,Low Latency|Music,Gaming,Calls|Amazon|30h/10mm/Bluetooth 5.3
+QuietOne ANC|Quiet|Over-Ear|8999|12999|4.5|9100|90|78|ANC,Comfort,Long Battery,Good Microphone|Travel,Study,Calls,Music|Amazon|60h/40mm/Bluetooth 5.3
+Rift Gaming|Rift|Over-Ear|5499|7999|4.3|6800|84|70|Low Latency,Good Microphone,Good Bass,Comfort|Gaming,Calls|Flipkart|40h/50mm/Wireless + wired
+Neck Pulse|Pulse|Neckband|1499|2499|4.0|52000|68|88|Long Battery,Good Bass,Good Microphone|Music,Calls,Study|Flipkart|35h/10mm/Bluetooth 5.2
+Wire Pure|Pure|Wired|1999|2499|4.2|8300|80|60|Good Bass,Comfort,Good Microphone|Music,Study,Gaming|Amazon|None/12mm/3.5mm jack`,
+Smartwatch:`Pulse Band 2|Pulse|Fitness Band|2499|3999|4.0|22000|70|85|Heart Rate,Long Battery,Water Resistant|Fitness,Sleep Tracking|Amazon|14 days/1.4in LCD/5 ATM
+Chrono Call|Chrono|Everyday Smartwatch|4999|7999|4.2|15400|78|82|AMOLED Display,Calling,Heart Rate,Water Resistant|Notifications,Calls,Fitness|Flipkart|7 days/1.7in AMOLED/IP68
+Trail GPS|Trail|Sports Watch|11999|14999|4.5|4300|89|66|GPS,Long Battery,Heart Rate,Water Resistant,AMOLED Display|Sports,Fitness,Sleep Tracking|Amazon|12 days/1.4in AMOLED/5 ATM
+Elite One|Elite|Premium|24999|29999|4.6|3100|93|70|AMOLED Display,GPS,Calling,Heart Rate,Water Resistant,Long Battery|Calls,Notifications,Fitness,Sports,Sleep Tracking|Amazon|10 days/1.5in AMOLED/10 ATM
+Daily Tick|Tick|Everyday Smartwatch|2999|4499|3.9|27500|68|84|Calling,Heart Rate|Notifications,Calls|Flipkart|5 days/1.8in LCD/IP67`,
+Shoes:`Stride Run|Stride|Running|3499|4999|4.2|19500|78|85|Lightweight,Cushioning,Comfort,Grip|Running,Walking|Myntra|Mesh/Rubber/280g
+Gym Forge|Forge|Training|4299|5999|4.3|8800|82|70|Grip,Durability,Comfort|Gym,Sports|Myntra|Synthetic/Rubber/340g
+Urban Walk|Urban|Walking|2299|3499|4.1|31000|74|88|Comfort,Cushioning,Lightweight|Walking,Daily Use|Meesho|Knit/EVA/260g
+Court Pro|Court|Sports|5999|7999|4.4|5200|86|64|Grip,Durability,Cushioning,Comfort|Sports,Gym,Running|Flipkart|Leather blend/Rubber/360g
+Everyday Kicks|Kicks|Casual|1799|2999|3.9|41000|66|90|Comfort,Lightweight|Daily Use,Walking|Meesho|Canvas/Rubber/300g`
+};
+// Retailer link builders (store search pages, never invented product pages).
+const STORE_URL = {
+  Amazon:q=>'https://www.amazon.in/s?k='+q, Flipkart:q=>'https://www.flipkart.com/search?q='+q,
+  Myntra:q=>'https://www.myntra.com/'+q.replace(/%20/g,'-'), Meesho:q=>'https://www.meesho.com/search?q='+q
+};
+function normalize(cat, line, i) {
+  const f = line.split('|');
+  if (f.length < 13) return null;
+  const [name,brand,sub,price,orig,rating,rev,qs,pop,feat,pur,platform,spec] = f.map(s=>s.trim());
+  const p = {id:cat.toLowerCase()+'_'+String(i+1).padStart(3,'0'),name,brand,category:cat,subcategory:sub,
+    description:name+' by '+brand+' (demo record).',image:ICONS[cat]||'🛍️',price:Number(price),originalPrice:Number(orig),
+    rating:Number(rating),reviewCount:Number(rev),qualityScore:Number(qs),popularityScore:Number(pop),availability:true,
+    features:feat.split(','),specifications:{},purposeTags:pur.split(','),platform,productUrl:''};
+  spec.split('/').forEach((v,k)=>{ p.specifications[(LABELS[cat]||[])[k]||'Spec '+(k+1)] = v; });
+  p.discountPercentage = p.originalPrice > p.price ? Math.round((1-p.price/p.originalPrice)*100) : 0;
+  const u = STORE_URL[platform]; p.productUrl = u ? u(encodeURIComponent(name+' '+brand)) : '';
+  return [p.price,p.rating,p.qualityScore,p.reviewCount].every(Number.isFinite) && p.name ? p : null;
+}
+const ProductService = {
+  async getProducts(cat) {
+    return (RAW[cat]||'').trim().split('\n').map((l,i)=>{ try { return normalize(cat,l,i); } catch(e) { return null; } }).filter(Boolean);
+  }
+};
+
+
+const CATS = {
+  Headphones:{icon:'🎧',alias:['headphone','earphone','earbud','headset','tws','neckband'],
+    types:['TWS','Over-Ear','Neckband','Wired'],purposes:['Music','Gaming','Calls','Travel','Study'],
+    features:['ANC','Good Bass','Low Latency','Long Battery','Good Microphone','Comfort'],budget:[500,20000,500]},
+  Smartwatch:{icon:'⌚',alias:['smartwatch','watch','fitness band','smart band'],
+    types:['Fitness Band','Everyday Smartwatch','Sports Watch','Premium'],purposes:['Fitness','Sleep Tracking','Notifications','Sports','Calls'],
+    features:['AMOLED Display','GPS','Long Battery','Calling','Heart Rate','Water Resistant'],budget:[1000,30000,500]},
+  Laptop:{icon:'💻',alias:['laptop','notebook','macbook'],
+    types:['Student Laptop','Gaming Laptop','Programming Laptop','Business Laptop','Creator Laptop'],
+    purposes:['Programming','Gaming','College','Office Work','Video Editing','Graphic Design','General Use'],
+    features:['High Performance','Long Battery','Lightweight','Dedicated GPU','High Refresh Rate','Large Storage','High RAM','Good Display'],budget:[25000,150000,5000]},
+  Shoes:{icon:'👟',alias:['shoe','sneaker','footwear','trainer'],
+    types:['Running','Walking','Training','Casual','Sports'],purposes:['Running','Gym','Walking','Daily Use','Sports'],
+    features:['Comfort','Lightweight','Durability','Cushioning','Grip'],budget:[1000,15000,500]},
+  Mobile:{icon:'📱',alias:['mobile','phone','smartphone','iphone','android'],
+    types:['Budget Phone','Gaming Phone','Camera Phone','Flagship','All-rounder'],
+    purposes:['Gaming','Photography','Video','Social Media','Study','Work','Normal Daily Use'],
+    features:['Good Camera','High Performance','Long Battery','Fast Charging','AMOLED Display','120Hz Display','5G','Large Storage','Good Speakers','Gaming Performance'],budget:[8000,80000,1000]}
+};
+const CAT_ORDER = ['Mobile','Laptop','Headphones','Smartwatch','Shoes'];
+// Map free text to a category. Headphones is checked before Mobile because "headphones" contains "phone".
+function detectCategory(text) {
+  const t = String(text||'').toLowerCase().trim();
+  if (!t) return null;
+  for (const [k,c] of Object.entries(CATS)) if (k.toLowerCase()===t || c.alias.some(a=>t.includes(a))) return k;
+  return null;
+}
+function generateQuestions(cat) { return CATS[cat]; }
+function validateQuestionnaire(step, a) {
+  if (step==='type' && !a.type) return 'Please choose a type to continue.';
+  if (step==='purpose' && !a.purpose.length) return 'Please pick at least one use.';
+  if (step==='budget' && !(a.budget>0)) return 'Please set a budget.';
+  if (step==='features' && !a.features.length) return 'Please pick at least one feature.';
+  return '';
+}
+function collectUserRequirements(term, cat, a) {
+  return {term, category:cat, type:a.type, purpose:[...a.purpose], budget:a.budget, features:[...a.features], quality:a.quality, rating:a.rating};
+}
+
+
+/* Transparent, reproducible scoring. Pure functions: no DOM access. */
+const BASE_WEIGHTS = {req:35, quality:20, rating:15, features:15, price:10, pop:5};
+const clamp = (n,a=0,b=100) => Math.min(b, Math.max(a, n));
+const fmtINR = n => '₹'+Number(n).toLocaleString('en-IN');
+// User importance (1-5) scales the quality and rating weights (3 = default); weights are then normalised to sum to 1.
+function getWeights(req) {
+  const w = {...BASE_WEIGHTS, quality:BASE_WEIGHTS.quality*req.quality/3, rating:BASE_WEIGHTS.rating*req.rating/3};
+  const t = Object.values(w).reduce((a,b)=>a+b,0);
+  for (const k in w) w[k] /= t;
+  return w;
+}
+function calculateFeatureMatch(p, req) {
+  const matched = req.features.filter(f=>p.features.includes(f));
+  return {matched, missing:req.features.filter(f=>!p.features.includes(f)), pct:req.features.length ? matched.length/req.features.length*100 : 100};
+}
+function calculateRequirementMatch(p, req) {
+  const hits = req.purpose.filter(x=>p.purposeTags.includes(x)).length;
+  const pur = req.purpose.length ? hits/req.purpose.length*100 : 100;
+  const same = p.subcategory===req.type;
+  const sub = same ? 100 : (req.type==='All-rounder'||p.subcategory==='All-rounder' ? 70 : 40);
+  return {value:pur*0.6+sub*0.4, hits, sameType:same};
+}
+const calculateQualityScore = p => clamp(p.qualityScore);
+const calculateRatingScore = p => clamp(p.rating/5*100);
+const calculatePopularity = p => clamp(Math.log10(p.reviewCount+1)/5*100);
+function calculatePriceValue(p, req, featurePct) {
+  return clamp(featurePct*0.5 + (1-p.price/req.budget)*40 + p.discountPercentage/2);
+}
+function calculateRecommendationScore(p, req) {
+  const fm = calculateFeatureMatch(p, req), rm = calculateRequirementMatch(p, req), w = getWeights(req);
+  const parts = {req:rm.value, quality:calculateQualityScore(p), rating:calculateRatingScore(p), features:fm.pct, price:calculatePriceValue(p,req,fm.pct), pop:calculatePopularity(p)};
+  let s = 0; for (const k in parts) s += parts[k]*w[k];
+  const over = p.price - req.budget;
+  const why = [
+    over<=0 ? 'Fits your budget ('+fmtINR(p.price)+' of '+fmtINR(req.budget)+').' : 'Costs '+fmtINR(over)+' more than your budget.',
+    'Supports '+fm.matched.length+' of your '+req.features.length+' requested features.',
+    'Covers '+rm.hits+' of your '+req.purpose.length+' selected uses.'
+  ];
+  if (rm.sameType) why.push('Matches the "'+req.type+'" type you chose.');
+  if (p.rating>=4) why.push('Rated '+p.rating.toFixed(1)+'/5 by '+p.reviewCount.toLocaleString('en-IN')+' users (a rating does not guarantee quality).');
+  if (p.qualityScore>=80) why.push('High internal quality score ('+p.qualityScore+'/100).');
+  return {p, score:Math.round(clamp(s)), parts, fm, why, overBy:Math.max(0,over)};
+}
+const rankProducts = list => [...list].sort((a,b)=>b.score-a.score || b.p.qualityScore-a.p.qualityScore);
+async function analyze(req) {
+  const all = await ProductService.getProducts(req.category);
+  const scored = all.map(p=>calculateRecommendationScore(p, req));
+  const within = scored.filter(r=>r.p.price<=req.budget);
+  if (within.length) return {exact:true, total:all.length, ranked:rankProducts(within)};
+  const alts = [...scored].sort((a,b)=>a.overBy-b.overBy).slice(0,3);
+  return {exact:false, total:all.length, ranked:rankProducts(alts)};
+}
+
+
+const $ = (s, e=document) => e.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STEPS = ['type','purpose','budget','features','priority'];
+const S = {cat:null, term:'', step:0, ans:null, req:null, res:null, cmp:[], f:{brand:'',platform:'',rating:0,quality:0}, sort:'best', loading:false, tok:0};
+
+const empty = (t, d, link) => `<div class="empty"><h3>${esc(t)}</h3><p>${esc(d)}</p>${link?'<a class="btn" href="#/">Start a new search</a>':''}</div>`;
+let tt;
+function toast(m) { const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2200); }
+const pills = (name, opts, sel, multi) => `<div class="pills">${opts.map(o=>`<label class="pill"><input type="${multi?'checkbox':'radio'}" name="${name}" value="${esc(o)}"${sel.includes(o)?' checked':''}><span>${esc(o)}</span></label>`).join('')}</div>`;
+
+/* ---------- Views ---------- */
+function hView() {
+  const steps = [['Search','Tell us what product you are looking for.'],['Tell us your needs','Answer a few simple questions about budget, purpose and features.'],['We compare','Products are evaluated against your requirements, quality and ratings.'],['Choose','See ranked recommendations with details and store links.']];
+  return `<section class="hero wrap"><h1>Find the Product That Fits You Best.</h1>
+  <p class="lead">Tell us what you need. We compare products based on your requirements, quality, ratings, features and price.</p>
+  <form id="sf" class="search" novalidate><label for="q">What are you looking for?</label>
+  <div class="srow"><div class="inp"><input id="q" list="sg" autocomplete="off" placeholder="Search for a product, e.g. Mobile, Laptop, Shoes..."><button type="button" class="x" data-act="clear" aria-label="Clear search" hidden>&#10005;</button></div>
+  <button class="btn" type="submit">Find My Best Product</button></div>
+  <datalist id="sg">${CAT_ORDER.map(c=>`<option value="${c}">`).join('')}</datalist><p id="err" class="err" role="alert"></p></form>
+  <div class="chips"><span>Popular:</span>${CAT_ORDER.map(c=>`<button class="chip" data-act="chip" data-id="${c}">${c}</button>`).join('')}</div></section>
+  <section id="how" class="wrap sec"><h2>How it works</h2><ol class="steps">${steps.map(s=>`<li><h3>${s[0]}</h3><p>${s[1]}</p></li>`).join('')}</ol></section>
+  <section class="wrap sec"><h2>Explore Popular Categories</h2><div class="cats">${CAT_ORDER.map(c=>`<button class="cat" data-act="cat" data-id="${c}"><span aria-hidden="true">${CATS[c].icon}</span>${c==='Shoes'?'Shoes':c+'s'.replace('ss','s')}</button>`).join('')}</div></section>`;
+}
+function qView() {
+  const c = generateQuestions(S.cat), a = S.ans, k = STEPS[S.step], n = STEPS.length, lc = S.cat.toLowerCase();
+  let t, d, body;
+  if (k==='type') { t=`What type of ${lc} do you need?`; d='Pick the closest match.'; body=pills('type',c.types,[a.type]); }
+  else if (k==='purpose') { t='What will you mainly use it for?'; d='Select all that apply.'; body=pills('purpose',c.purposes,a.purpose,1); }
+  else if (k==='budget') { t='What is your budget?'; d='We only recommend products within this maximum, and tell you clearly if none fit.';
+    body=`<label for="bud">Maximum budget: <output id="bo" class="big">${fmtINR(a.budget)}</output></label><input id="bud" name="budget" type="range" min="${c.budget[0]}" max="${c.budget[1]}" step="${c.budget[2]}" value="${a.budget}"><div class="rng"><span>${fmtINR(c.budget[0])}</span><span>${fmtINR(c.budget[1])}</span></div>`; }
+  else if (k==='features') { t='Which features are important to you?'; d='Select all that matter. Products are scored on how many they support.'; body=pills('features',c.features,a.features,1); }
+  else { t='What matters most?'; d='Rate importance from 1 (low) to 5 (essential). This changes how much quality and ratings count in the score.';
+    body=[['quality','How important is quality?'],['rating','How important are user ratings?']].map(([x,l])=>`<fieldset><legend>${l}</legend>${pills(x,['1','2','3','4','5'],[String(a[x])])}</fieldset>`).join(''); }
+  return `<section class="wrap narrow"><p class="muted">Searching for <strong>${esc(S.term)}</strong> &middot; Step ${S.step+1} of ${n}</p>
+  <div class="prog" role="progressbar" aria-label="Questionnaire progress" aria-valuemin="1" aria-valuemax="${n}" aria-valuenow="${S.step+1}"><i style="width:${(S.step+1)/n*100}%"></i></div>
+  <div class="panel fade"><h2 tabindex="-1">${t}</h2><p class="muted">${d}</p>${body}
+  <p id="msg" class="err" role="alert"></p>
+  <div class="nav2"><button class="btn ghost" data-act="back">Back</button><button class="btn" data-act="next">${S.step===n-1?'Show My Matches':'Next'}</button></div></div></section>`;
+}
+const loadView = () => `<section class="wrap narrow load"><div class="spin" aria-hidden="true"></div><h2 id="lm" role="status">Understanding your requirements...</h2></section>`;
+
+function card(r, best) {
+  const p = r.p, id = esc(p.id), inC = S.cmp.some(x=>x.p.id===p.id);
+  const tags = r.fm.matched.map(f=>`<span class="tag ok">&#10003; ${esc(f)}</span>`).concat(r.fm.missing.map(f=>`<span class="tag no">&#10005; ${esc(f)} (missing)</span>`)).join('');
+  const why = `<ul class="why">${r.why.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`;
+  const link = /^https:\/\//.test(p.productUrl) ? `<a class="btn" href="${esc(p.productUrl)}" target="_blank" rel="noopener noreferrer sponsored">View on ${esc(p.platform)}</a>` : '<span class="muted">Link unavailable</span>';
+  return `<article class="card${best?' best':''}">${best?'<span class="badge">BEST MATCH</span>':''}
+  <div class="ph" role="img" aria-label="${esc(p.name)} (placeholder image)">${esc(p.image||'🛍️')}</div>
+  <div class="body"><p class="brand">${esc(p.brand)} &middot; ${esc(p.subcategory)}</p><h3>${esc(p.name)}</h3>
+  <p class="rate"><span class="star" aria-hidden="true">&#9733;</span> <strong>${p.rating.toFixed(1)}</strong>/5 <span class="muted">(${p.reviewCount.toLocaleString('en-IN')} reviews)</span></p>
+  <p class="price"><strong>${fmtINR(p.price)}</strong>${p.discountPercentage?` <s>${fmtINR(p.originalPrice)}</s> <span class="disc">${p.discountPercentage}% off</span>`:''}</p>
+  ${r.overBy>0?`<p class="disc">${fmtINR(r.overBy)} over your budget</p>`:''}
+  <div class="scores"><span class="sc m"><b>${r.score}</b>Match</span><span class="sc"><b>${p.qualityScore}</b>Quality</span><span class="sc"><b>${Math.round(r.fm.pct)}%</b>Features</span></div>
+  <p class="tags">${tags}</p>${best?`<h4>Why recommended</h4>${why}`:`<details><summary>Why recommended</summary>${why}</details>`}
+  <div class="acts">${link}<button class="btn ghost" data-act="cmp" data-id="${id}" aria-pressed="${inC}">${inC?'&#10003; Added to Compare':'Add to Compare'}</button></div></div></article>`;
+}
+function rView() {
+  const r = S.res, q = S.req, best = r.ranked[0];
+  if (!best) return `<section class="wrap">${empty("We couldn't find an exact match.","Try changing your budget, category or required features.",true)}</section>`;
+  const w = getWeights(q), pc = k => Math.round(w[k]*100);
+  const brands = [...new Set(r.ranked.map(x=>x.p.brand))].sort(), plats = [...new Set(r.ranked.map(x=>x.p.platform))].sort();
+  const sel = (key, label, opts) => `<label>${label}<select data-f="${key}">${opts.map(([v,t])=>`<option value="${esc(v)}"${String(S.f[key]??S.sort)===String(v)?' selected':''}>${esc(t)}</option>`).join('')}</select></label>`;
+  return `<section class="wrap"><h1>Your Best Matches</h1><p class="lead">Products ranked according to your requirements.</p>
+  <dl class="sum"><div><dt>Search</dt><dd>${esc(q.term)}</dd></div><div><dt>Budget</dt><dd>${fmtINR(q.budget)}</dd></div><div><dt>Purpose</dt><dd>${esc(q.purpose.join(', '))}</dd></div><div><dt>Features</dt><dd>${esc(q.features.join(', '))}</dd></div><div><dt>Analyzed</dt><dd>${r.total} products</dd></div></dl>
+  ${r.exact?'':`<div class="note"><strong>No products fit your budget.</strong> Here are the closest alternatives and the price difference.</div>`}
+  <h2>Best Match For You</h2><p class="muted">Based on your budget, ${esc(q.purpose.join(' and ').toLowerCase())} needs and ${q.features.length} preferred feature${q.features.length>1?'s':''}, this product has the highest calculated match score among the available products. It is a best match for your requirements, not a universal verdict.</p>${card(best,true)}
+  <details class="how"><summary>How is the match score calculated?</summary><p>Score (0-100) = weighted sum of requirement match (${pc('req')}%), quality (${pc('quality')}%), user rating (${pc('rating')}%), feature match (${pc('features')}%), price value (${pc('price')}%) and popularity (${pc('pop')}%). Quality and rating weights follow the importance you set. Quality is an internal estimate and separate from user ratings.</p></details>
+  <h2>Other Strong Matches</h2>
+  <details class="filters" open><summary>Filters and sorting</summary><div class="fgrid2">
+  ${sel('brand','Brand',[['','All brands'],...brands.map(b=>[b,b])])}${sel('platform','Platform',[['','All platforms'],...plats.map(b=>[b,b])])}
+  ${sel('rating','Minimum rating',[[0,'Any'],[4,'4.0+'],[4.3,'4.3+'],[4.5,'4.5+']])}${sel('quality','Minimum quality',[[0,'Any'],[70,'70+'],[80,'80+'],[90,'90+']])}
+  ${sel('sort','Sort by',[['best','Best Match'],['price','Lowest Price'],['rating','Highest Rating'],['quality','Highest Quality'],['discount','Highest Discount']])}</div></details>
+  <div id="list"></div></section>`;
+}
+function cView() {
+  const c = S.cmp;
+  if (!c.length) return `<section class="wrap"><h1>Compare Products</h1>${empty('Nothing to compare yet','Add up to 4 products from your results to compare them side by side.',true)}</section>`;
+  const row = (l, f) => `<tr><th scope="row">${l}</th>${c.map(r=>`<td>${f(r)}</td>`).join('')}</tr>`;
+  return `<section class="wrap"><h1>Compare Products</h1><div class="scroll"><table class="cmp"><thead><tr><th scope="col"><span class="sr">Attribute</span></th>${c.map(r=>`<th scope="col">${esc(r.p.name)}<br><button class="link" data-act="rm" data-id="${esc(r.p.id)}">Remove</button></th>`).join('')}</tr></thead><tbody>
+  ${row('Price',r=>fmtINR(r.p.price))}${row('Discount',r=>r.p.discountPercentage?r.p.discountPercentage+'% off':'None')}
+  ${row('Rating',r=>r.p.rating.toFixed(1)+'/5')}${row('Review Count',r=>r.p.reviewCount.toLocaleString('en-IN'))}
+  ${row('Quality Score',r=>r.p.qualityScore+'/100')}${row('Recommendation Score',r=>r.score+'/100')}
+  ${row('Feature Match',r=>Math.round(r.fm.pct)+'% ('+r.fm.matched.length+'/'+(r.fm.matched.length+r.fm.missing.length)+')')}
+  ${row('Key Features',r=>esc(r.p.features.join(', ')))}${row('Specifications',r=>Object.entries(r.p.specifications).map(([k,v])=>esc(k)+': '+esc(v)).join('<br>'))}
+  ${row('Platform',r=>/^https:\/\//.test(r.p.productUrl)?`<a href="${esc(r.p.productUrl)}" target="_blank" rel="noopener noreferrer sponsored">View on ${esc(r.p.platform)}</a>`:esc(r.p.platform))}
+  </tbody></table></div></section>`;
+}
+
+/* ---------- Results list: filtering + sorting ---------- */
+const applyFilters = items => items.filter(r => (!S.f.brand||r.p.brand===S.f.brand) && (!S.f.platform||r.p.platform===S.f.platform) && r.p.rating>=S.f.rating && r.p.qualityScore>=S.f.quality);
+function applySorting(items) {
+  const by = {best:(a,b)=>b.score-a.score, price:(a,b)=>a.p.price-b.p.price, rating:(a,b)=>b.p.rating-a.p.rating, quality:(a,b)=>b.p.qualityScore-a.p.qualityScore, discount:(a,b)=>b.p.discountPercentage-a.p.discountPercentage};
+  return [...items].sort(by[S.sort]||by.best);
+}
+function renderList() {
+  const el = $('#list'); if (!el) return;
+  const items = applySorting(applyFilters(S.res.ranked.slice(1)));
+  el.innerHTML = items.length ? `<div class="grid">${items.map(r=>card(r)).join('')}</div>` : empty('No other products to show','Try relaxing the filters.');
+}
+
+/* ---------- Compare ---------- */
+function toggleCmp(id) {
+  const i = S.cmp.findIndex(x=>x.p.id===id);
+  if (i>=0) return removeFromCompare(id);
+  const r = S.res && S.res.ranked.find(x=>x.p.id===id); if (!r) return;
+  if (S.cmp.length>=4) return toast('You can compare up to 4 products.');
+  addToCompare(r);
+}
+function addToCompare(r) { S.cmp.push(r); toast(r.p.name+' added to compare.'); refreshCmp(); }
+function removeFromCompare(id) {
+  const r = S.cmp.find(x=>x.p.id===id); S.cmp = S.cmp.filter(x=>x.p.id!==id);
+  if (r) toast(r.p.name+' removed.');
+  if (location.hash==='#/compare') route(); else refreshCmp();
+}
+function refreshCmp() {
+  const n = S.cmp.length;
+  $('#cc').textContent = n ? '('+n+')' : '';
+  document.body.classList.toggle('hastray', n>0);
+  $('#tray').innerHTML = n ? `<div class="tray"><div class="wrap trow"><div class="tchips"><strong>Compare (${n}/4):</strong>${S.cmp.map(r=>`<span class="tchip">${esc(r.p.name)} <button class="link" data-act="rm" data-id="${esc(r.p.id)}" aria-label="Remove ${esc(r.p.name)} from compare">&#10005;</button></span>`).join('')}</div><a class="btn sm" href="#/compare">Compare</a></div></div>` : '';
+  document.querySelectorAll('[data-act="cmp"]').forEach(b => { const on = S.cmp.some(x=>x.p.id===b.dataset.id); b.setAttribute('aria-pressed', on); b.textContent = on ? '✓ Added to Compare' : 'Add to Compare'; });
+}
+
+/* ---------- Flow ---------- */
+function startSearch(raw) {
+  const t = String(raw||'').trim(), err = $('#err'), fail = m => { if (err) err.textContent = m; };
+  if (!t) return fail('Please enter a product. For example: Mobile, Laptop, Headphones.');
+  const c = detectCategory(t);
+  if (!c) return fail(`We couldn't find "${t}" yet. Try: ${CAT_ORDER.join(', ')}.`);
+  startCategory(c, t);
+}
+function startCategory(c, t) {
+  const b = CATS[c].budget;
+  S.cat = c; S.term = t || c; S.step = 0; S.res = null; S.cmp = []; S.loading = false; S.tok++; S.sort = 'best'; S.f = {brand:'',platform:'',rating:0,quality:0};
+  S.ans = {type:'', purpose:[], budget:Math.min(b[1], Math.max(b[0], Math.round((b[0]+b[1])/2/b[2])*b[2])), features:[], quality:3, rating:3};
+  location.hash === '#/questions' ? route() : (location.hash = '#/questions');
+}
+function next() {
+  const m = validateQuestionnaire(STEPS[S.step], S.ans);
+  if (m) { $('#msg').textContent = m; return; }
+  if (S.step < STEPS.length-1) { S.step++; route(); } else submitQ();
+}
+function back() { if (S.step>0) { S.step--; route(); } else location.hash = '#/'; }
+async function submitQ() {
+  S.req = collectUserRequirements(S.term, S.cat, S.ans); S.loading = true;
+  const tok = ++S.tok; route();
+  const msgs = ['Understanding your requirements...','Checking matching products...','Comparing features...','Evaluating ratings and quality...','Finding your best matches...'];
+  let i = 0; const iv = setInterval(() => { const el = $('#lm'); if (!el) return clearInterval(iv); el.textContent = msgs[i = Math.min(i+1, msgs.length-1)]; }, 300);
+  let res;
+  try { [res] = await Promise.all([analyze(S.req), new Promise(r=>setTimeout(r,1500))]); }
+  catch (e) { console.error(e); res = {exact:false, total:0, ranked:[]}; }
+  clearInterval(iv);
+  if (tok !== S.tok) return;
+  S.loading = false; S.res = res;
+  if (location.hash === '#/questions') location.hash = '#/results';
+}
+
+/* ---------- Router ---------- */
+function route() {
+  const h = location.hash.replace(/^#\/?/, ''), app = $('#app');
+  document.title = 'BestBuy Finder';
+  try {
+    let html;
+    if (h==='questions') { if (!S.cat) return void (location.hash = '#/'); html = S.loading ? loadView() : qView(); }
+    else if (h==='results') { if (!S.res) return void (location.hash = '#/'); html = rView(); }
+    else if (h==='compare') html = cView();
+    else html = hView();
+    app.innerHTML = html;
+    if (h==='results') renderList();
+    if (h==='how') $('#how').scrollIntoView(); else window.scrollTo(0,0);
+    if (h==='search') $('#q').focus();
+    if (h==='questions' && !S.loading) { const t=$('.panel h2'); if (t) t.focus({preventScroll:true}); }
+  } catch (e) { console.error(e); app.innerHTML = `<section class="wrap">${empty('Something went wrong','Please refresh the page or start a new search.',true)}</section>`; }
+  $('#nav').classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded','false');
+  refreshCmp();
+}
+
+/* ---------- Events (delegated) ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const {act, id} = b.dataset;
+  if (act==='next') next(); else if (act==='back') back();
+  else if (act==='cat') startCategory(id, id); else if (act==='chip') startSearch(id);
+  else if (act==='cmp') toggleCmp(id); else if (act==='rm') removeFromCompare(id);
+  else if (act==='clear') { const q=$('#q'); q.value=''; q.focus(); b.hidden=true; }
+  else if (act==='menu') { const o=$('#nav').classList.toggle('open'); b.setAttribute('aria-expanded', o); }
+});
+document.addEventListener('submit', e => { if (e.target.id==='sf') { e.preventDefault(); startSearch($('#q').value); } });
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id==='q') { $('[data-act="clear"]').hidden = !t.value; $('#err').textContent = ''; }
+  if (t.id==='bud' && S.ans) { S.ans.budget = Number(t.value); $('#bo').textContent = fmtINR(t.value); }
+});
+document.addEventListener('change', e => {
+  const t = e.target, n = t.name;
+  if (t.dataset.f) { const k = t.dataset.f; if (k==='sort') S.sort = t.value; else S.f[k] = (k==='rating'||k==='quality') ? Number(t.value) : t.value; return renderList(); }
+  if (!S.ans || !t.closest('.panel')) return;
+  if (n==='type') S.ans.type = t.value;
+  else if (n==='quality' || n==='rating') S.ans[n] = Number(t.value);
+  else if (n==='purpose' || n==='features') S.ans[n] = [...document.querySelectorAll(`.panel input[name="${n}"]:checked`)].map(i=>i.value);
+  const m = $('#msg'); if (m) m.textContent = '';
+});
+window.addEventListener('scroll', () => $('#hdr').classList.toggle('sc', window.scrollY>4), {passive:true});
+window.addEventListener('hashchange', route);
+window.addEventListener('error', e => console.error(e.error || e.message));
+route();
+
+</script>
+</body>
+</html>
